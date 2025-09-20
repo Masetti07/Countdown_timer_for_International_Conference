@@ -1,0 +1,84 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Countdown Timer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .timer-box {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      background: #e29cdd;
+      border-radius: 12px;
+      text-align: center;
+    }.time {
+      font-size: 2.5rem;
+      font-weight: bold;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }@media (max-width: 576px) {
+      .time { font-size: 1.8rem; }
+    }
+    .progress-container {
+      margin-top: 20px;
+    }
+    .mb-3{
+        margin-bottom: 1rem !important;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer-box shadow">
+    <h4 class="mb-3">International Conference Starts In:</h4>
+    <div id="countdown" class="time text-primary"></div>
+    <div class="progress-container">
+      <div class="progress" style="height: 25px;">
+        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const countdownEl = document.getElementById("countdown");
+    const progressBarEl = document.getElementById("progressBar");
+
+    
+    const startDate = new Date("2025-09-20T00:00:00Z").getTime();
+    const targetDate = new Date("2025-09-20T00:00:00Z").getTime();
+    const totalDuration = targetDate - startDate;
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        countdownEl.innerHTML = "Conference Started!";
+        progressBarEl.style.width = "100%";
+        progressBarEl.setAttribute("aria-valuenow", 100);
+        progressBarEl.classList.remove("progress-bar-animated");
+        clearInterval(timerInterval);
+        return;
+      }
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+     
+      countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+      
+      const elapsedTime = now - startDate;
+      let progressPercentage = (elapsedTime / totalDuration) * 100;
+      progressPercentage = Math.min(100, progressPercentage); 
+
+      progressBarEl.style.width = `${progressPercentage}%`;
+      progressBarEl.setAttribute("aria-valuenow", progressPercentage.toFixed(2));
+    }
+    updateTimer();
+    const timerInterval = setInterval(updateTimer, 1000);
+  </script>
+</body>
+</html>
+
